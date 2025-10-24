@@ -1,6 +1,6 @@
 {
   "name": "@typescript-package/events",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "wwwdev.io <dev@wwwdev.io>",
   "description": "A lightweight TypeScript library for emitting and listening events.",
   "license": "MIT",
