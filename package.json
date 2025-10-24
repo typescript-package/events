@@ -23,7 +23,9 @@
   },
   "keywords": [
     "@typescript-package",
-    "@typescript-package/events"
+    "@typescript-package/events",
+    "EventEmitter",
+    "Listeners"
   ],
   "funding": [
     {
