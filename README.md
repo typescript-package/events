@@ -51,9 +51,34 @@ import {
 
 ```typescript
 import { EventEmitter } from '@typescript-package/events';
+
+// Define event types for EventEmitter
+type Events = {
+  data: (value: number) => void;
+  error: (err: Error) => void;
+};
+
+// Create an EventEmitter instance
+const emitter = new EventEmitter<Events>();
+
+// Listen for events
+emitter.on('data', value => console.log('Data:', value));
+emitter.on('error', err => console.error('Error:', err));
+
+// Emit events
+emitter.emit('data', 42); // Logs: Data: 42
+emitter.emit('error', new Error('Oops!')); // Logs: Error: Error: Oops!
 ```
 
 ### `Listeners`
+
+```typescript
+import { Listeners } from '@typescript-package/events';
+
+const listeners = new Listeners<(msg: string) => void>();
+listeners.add(msg => console.log(msg));
+listeners.emit('Hello, world!'); // Logs: Hello, world!
+```
 
 ## Contributing
 
