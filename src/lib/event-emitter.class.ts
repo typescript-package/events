@@ -28,25 +28,27 @@ export class EventEmitter<Events extends Record<string, (...args: any[]) => void
   }
 
   /**
-   * @description Remove all listeners for a specific event type.
+   * @description Removes all listeners for a specific event type.
    * @public
    * @template {keyof Events} Event 
    * @param {Event} event 
+   * @returns {this} 
    */
-  public clear<Event extends keyof Events>(event: Event): void {
-    this.#events.get(event)?.clear();
+  public clear<Event extends keyof Events>(event: Event): this {
+    return this.#events.get(event)?.clear(), this;
   }
 
   /**
-   * @description Remove all listeners for all event types.
+   * @description Removes all listeners for all event types.
    * @public
+   * @returns {this} 
    */
-  public clearAll(): void {
-    this.#events.clear();
+  public clearAll(): this {
+    return this.#events.clear(), this;
   }
 
   /**
-   * @description Get the number of listeners for a specific event.
+   * @description Gets the number of listeners for a specific event.
    * @public
    * @template {keyof Events} Event 
    * @param {Event} event 
@@ -57,53 +59,68 @@ export class EventEmitter<Events extends Record<string, (...args: any[]) => void
   }
 
   /**
-   * @description Emit an event, calling all listeners for that event type.
+   * @description Emits an event, calling all listeners for that event type.
    * @public
    * @template {keyof Events} Event 
    * @param {Event} event 
    * @param {...Parameters<Events[Event]>} args 
    */
-  public emit<Event extends keyof Events>(event: Event, ...args: Parameters<Events[Event]>): void {
-    this.#events.get(event)?.emit(...args);
+  public emit<Event extends keyof Events>(event: Event, ...args: Parameters<Events[Event]>): this {
+    return this.#events.get(event)?.emit(...args), this;
   }
 
   /**
-   * @description Add a listener for a specific event type.
+   * @description Emits an event asynchronously, calling all listeners for that event type.
+   * @public
+   * @async
+   * @template {keyof Events} Event 
+   * @param {Event} event 
+   * @param {...Parameters<Events[Event]>} args 
+   * @returns {this} 
+   */
+  public async emitAsync<Event extends keyof Events>(event: Event, ...args: Parameters<Events[Event]>): Promise<this> {
+    return await this.#events.get(event)?.emitAsync(...args), this;
+  }
+
+  /**
+   * @description Adds a listener for a specific event type.
    * @public
    * @template {keyof Events} Event 
    * @param {Event} event 
    * @param {Events[Event]} listener 
+   * @returns {this} 
    */
-  public on<Event extends keyof Events>(event: Event, listener: Events[Event]): void {
+  public on<Event extends keyof Events>(event: Event, listener: Events[Event]): this {
     if (!this.#events.has(event)) {
       this.#events.set(event, new Listeners<Events[Event]>());
     }
-    this.#events.get(event)!.add(listener);
+    return this.#events.get(event)!.add(listener), this;
   }
 
   /**
-   * @description Add a listener for a specific event type.
+   * @description Adds a listener for a specific event type.
    * @public
    * @template {keyof Events} Event 
    * @param {Event} event 
    * @param {Events[Event]} listener 
+   * @returns {this} 
    */
-  public once<Event extends keyof Events>(event: Event, listener: Events[Event]): void {
+  public once<Event extends keyof Events>(event: Event, listener: Events[Event]): this {
     if (!this.#events.has(event)) {
       this.#events.set(event, new Listeners<Events[Event]>());
     }
-    this.#events.get(event)!.once(listener);
+    return this.#events.get(event)!.add(listener, {once: true}), this;
   }
 
   /**
-   * @description Remove a listener for a specific event type.
+   * @description Removes a listener for a specific event type.
    * @public
    * @template {keyof Events} Event 
    * @param {Event} event 
    * @param {Events[Event]} listener 
+   * @returns {this} 
    */
-  public off<Event extends keyof Events>(event: Event, listener: Events[Event]): void {
-    this.#events.get(event)?.delete(listener);
+  public off<Event extends keyof Events>(event: Event, listener: Events[Event]): this {
+    return this.#events.get(event)?.delete(listener), this;
   }
 }
-
